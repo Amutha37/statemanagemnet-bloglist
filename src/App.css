@@ -1,38 +1,112 @@
-.App {
+.error,
+.success {
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.error {
+  color: red;
+}
+.success {
+  color: green;
+}
+/* login form   */
+.newBlog {
+  background-color: rgb(147, 240, 217);
+  width: 25rem;
+}
+.login_form_container {
+  height: 20rem;
+  background-color: rgb(147, 240, 217);
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+}
+
+.login_form {
+  margin-top: 5rem;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+input {
+  margin-top: 1rem;
+  margin-left: 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.logInBy {
+  display: inline-flex;
+}
+.logInBy button {
+  background-color: rgb(192, 67, 233);
+  margin-left: 1rem;
+  /* padding: 2px 2px 2px 2px; */
+}
+/* blog input form */
+
+.blog_list_container {
+  padding: 3rem;
+  background-color: rgb(99, 230, 201);
+  display: block;
+  text-align: center;
+}
+label {
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+input {
+  margin: 10px 10px 10px 10px;
+  width: 20rem;
+}
+.error {
+  /* color: rgb(21, 150, 57); */
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+/* table */
+.table_wraper {
+  width: 610px;
+  border: 3px solid black;
+  display: absolute;
+  flex-direction: row;
+  height: 12rem;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+ul {
+  list-style-type: none;
+  list-style-position: outside;
+}
+
+.btn_blog {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-right: 5px;
+  bottom: 0;
 }
-
-.App-link {
-  color: #61dafb;
+.btn_blog button {
+  height: 22px;
+  margin: 0px 6px 0px 1.5rem;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+h2 {
+  margin: 7rem auto 3rem auto;
+}
+.delBlog {
+  color: red;
+  font-weight: bold;
+}
+.count {
+  color: green;
+}
+.main_container {
+  text-align: center;
 }
