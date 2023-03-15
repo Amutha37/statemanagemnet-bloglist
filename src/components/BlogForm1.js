@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { createNewBlog } from '../reducers/blogReducer'
+import { createNewBlog } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
 const BlogForm = () => {
   const dispatch = useDispatch()
-  // const blogFormRef = useRef()
   // == new blog list local state ===
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -23,48 +22,48 @@ const BlogForm = () => {
     setUrl(event.target.value)
   }
 
-  const blogFormRef = useRef()
   // === add blog ===
-
-  // const addBlog = async (blogObject) => {
-
-  //   setErrTextColour(false)
-  //   try {
-  //     const saveBlog = await blogService.create(blogObject)
-  //     console.log('saveBlog', saveBlog)
-
-  //     // setBlogs([...blogs, saveBlog])
-
-  //     setShowing(true)
-  //     setErrorMessage(`Blog '${saveBlog.title}' succesfully saved.`)
-  //     setTimeout(() => {
-  //       setErrorMessage(null)
-  //     }, 5000)
-  //   } catch (error) {
-  //     console.log(error.response.data)
-  //     setErrTextColour(true)
-  //     setShowing(true)
-  //     setErrorMessage(error.response.data)
-  //     setTimeout(() => {
-  //       setErrorMessage(null)
-  //     }, 5000)
-  //   }
-  // }
-  const addBlog = async (e) => {
-    e.preventDefault()
+  const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    const content = {
-      title,
-      author,
-      url,
-    }
-    dispatch(createNewBlog(content))
+    setErrTextColour(false)
+    try {
+      const saveBlog = await blogService.create(blogObject)
+      console.log('saveBlog', saveBlog)
 
-    dispatch(setNotification(`Added new blog : ${title}`, 5))
-    setTitle('')
-    setUrl('')
-    setAuthor('')
+      setBlogs([...blogs, saveBlog])
+      setShowing(true)
+      setErrorMessage(`Blog '${saveBlog.title}' succesfully saved.`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    } catch (error) {
+      console.log(error.response.data)
+      setErrTextColour(true)
+      setShowing(true)
+      setErrorMessage(error.response.data)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
+  // const addBlog = async (e) => {
+  //   e.preventDefault()
+  //   const content = {
+  //     title,
+  //     author,
+  //     url,
+  //   }
+  //  dispatch(createNewBlog(content))
+  //   // createBlog({
+  //   //   title,
+  //   //   author,
+  //   //   url,
+  //   // })
+  //   dispatch(setNotification(`Added new blog : ${title}`, 5))
+  //   setTitle('')
+  //   setUrl('')
+  //   setAuthor('')
+  // }
 
   return (
     <div className='newBlog'>

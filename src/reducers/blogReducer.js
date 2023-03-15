@@ -5,11 +5,18 @@ const blogSlice = createSlice({
   name: 'blogs',
   initialState: [],
   reducers: {
-    addVote(state, action) {
+    addLike(state, action) {
       const blog = action.payload
 
       return state.map((blo) => (blo.id !== blog.id ? blo : blog))
     },
+    removeBlog(state, action) {
+      const blog = action.payload
+      state.filter((blo) => {
+        return blo.id !== blog
+      })
+    },
+
     // Add blog object to the backend db
     appendBlog(state, action) {
       state.push(action.payload)
@@ -21,31 +28,41 @@ const blogSlice = createSlice({
   },
 })
 
-export const { addVote, appendBlog, setBlog } = blogSlice.actions
+export const { addLike, removeBlog, appendBlog, setBlogs } = blogSlice.actions
 
-export const initializeBlog = () => {
+export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogService.getAll()
-    dispatch(setblog(blogs))
+    blogs.sort((a, b) => (b.likes > a.likes ? 1 : -1))
+    dispatch(setBlogs(blogs))
   }
 }
 
 export const createNewBlog = (content) => {
   return async (dispatch) => {
-    const newblog = await anecdoteService.createNew(content)
-    dispatch(appendAnecdote(newblog))
+    const newblog = await blogService.create(content)
+    dispatch(appendBlog(newblog))
   }
 }
 
-export const updateNewVote = (blog) => {
-  const newVote = {
+export const updateNewLikes = (blog) => {
+  console.log(blog)
+  const newLike = {
     ...blog,
-    votes: blog.likes + 1,
+    likes: blog.likes + 1,
+    user: blog.user.id,
   }
   return async (dispatch) => {
-    dispatch(addVote(newVote))
-    await blogService.update(newVote)
+    dispatch(addLike(newLike))
+    await blogService.update(newLike)
   }
 }
 
-export default anecdoteSlice.reducer
+export const updateDeleteBlog = (blogId) => {
+  return async (dispatch) => {
+    dispatch(removeBlog(blogId))
+    await blogService.deleteBlog(blogId)
+  }
+}
+
+export default blogSlice.reducer
