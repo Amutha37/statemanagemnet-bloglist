@@ -1,8 +1,9 @@
 import './app.css'
 import React, { useState, useEffect, useRef } from 'react'
+import { useQuery } from 'react-query'
 import Notification from './components/Notification'
 import Blog from './components/Blog.js'
-import blogService from './services/blogs'
+import { getAll, create, update, deleteBlog, setToken } from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -13,41 +14,62 @@ const App = () => {
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [errTextColour, setErrTextColour] = useState(true)
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
   const [showing, setShowing] = useState(false)
 
   const blogFormRef = useRef()
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) =>
-      // === sorting data ===
-
-      setBlogs(blogs.sort((a, b) => (b.likes > a.likes ? 1 : -1)))
-    )
-  }, [])
   // Handle the first loading page with user loged in
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      blogService.setToken(user.token)
+      setToken(user.token)
     }
   }, [])
+
+  // useEffect(() => {
+  //   getAll().then((blogs) =>
+  //     // === sorting data ===
+
+  //     setBlogs(blogs.sort((a, b) => (b.likes > a.likes ? 1 : -1)))
+  //   )
+  // }, [])
+  const { data, isError, isLoading } = useQuery('blogs', getAll, {
+    retry: 1,
+  })
+
+  if (isLoading) {
+    return <div>loading data...</div>
+  }
+  if (isError) {
+    return (
+      <span>
+        Error : {`blogs service not available due to problem in server`}
+      </span>
+    )
+  }
+
+  const blogs = data
+  // ? above
+  let sortLikes = (a, b) => b.likes - a.likes
+
+  blogs.sort(sortLikes)
+
   // === Add new blog list ===
   const addBlog = async (blogObject) => {
     // const newBlog = { title, author, url }
-
     // blogService.create(blogObject).then((returnedBlog) => {
     //   setBlogs(blogs.concat(returnedBlog))
     // })
     blogFormRef.current.toggleVisibility()
     setErrTextColour(false)
     try {
-      const saveBlog = await blogService.create(blogObject)
+      const saveBlog = await create(blogObject)
       console.log('saveBlog', saveBlog)
 
-      setBlogs([...blogs, saveBlog])
+      // setBlogs([...blogs, saveBlog])
       setShowing(true)
       setErrorMessage(`Blog '${saveBlog.title}' succesfully saved.`)
       setTimeout(() => {
@@ -72,7 +94,7 @@ const App = () => {
         password: loginObject.password,
       })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      blogService.setToken(user.token)
+      setToken(user.token)
       setUser(user)
     } catch (exception) {
       setErrTextColour(true)
@@ -113,7 +135,7 @@ const App = () => {
       likes: ++blogToChange.likes,
       user: blogToChange.user.id,
     }
-    const resStatus = await blogService.update(blogId, updatedBlog)
+    const resStatus = await update(blogId, updatedBlog)
     console.log('resStatus', resStatus.data)
   }
   // === Delete Blog ===
@@ -124,12 +146,12 @@ const App = () => {
     )
 
     if (sureToDelete) {
-      await blogService.deleteBlog(blogId)
-      setBlogs(
-        blogs.filter((blog) => {
-          return blog.id !== blogId
-        })
-      )
+      await deleteBlog(blogId)
+      // setBlogs(
+      //   blogs.filter((blog) => {
+      //     return blog.id !== blogId
+      //   })
+      // )
     }
   }
 

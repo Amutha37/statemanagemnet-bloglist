@@ -1,14 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
 import App from './App'
-import store from './store'
+import './app.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
+const queryClient = new QueryClient()
+
+// ReactDOM.createRoot(document.getElementById('root')).render(
+//   <QueryClientProvider client={queryClient}>
+//     <App />
+//   </QueryClientProvider>
+// )
+ReactDOM.render(
+  <QueryClientProvider client={queryClient}>
     <App />
-  </Provider>
+  </QueryClientProvider>,
+  document.getElementById('root')
 )
-// import App from './App'
-
-// ReactDOM.render(<App />, document.getElementById('root'))

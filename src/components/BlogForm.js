@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { setNotification } from '../reducers/notificationReducer'
 
 const BlogForm = ({ createBlog }) => {
-  const dispatch = useDispatch()
   // == new blog list local state ===
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -30,7 +27,7 @@ const BlogForm = ({ createBlog }) => {
       author,
       url,
     })
-    dispatch(setNotification(`Added new blog : ${title}`, 5))
+
     setTitle('')
     setUrl('')
     setAuthor('')
